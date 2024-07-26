@@ -5,8 +5,10 @@ Daha önce Youtube -clone için de yapmıştk . Bütün data, icon vs  resimleri
 SORUNLAR :
 const albumId = isAlbum ? location.pathname.slice(-1) : "";
   const bgColor = albumsData[Number(albumId)].bgColor;  biz burada zaten album id bize bir sayı dönüyordu(dönüyor muydu ) neden bunu Number(albumıd)aldık
+***visiul studio da kod satırında bir elementin tam bir satır içinde görülmesi ya da görülememesi 
 
 
+ 
 
 
 
@@ -50,6 +52,7 @@ hidden sm:block=> bunu cizaz küçüldüğünde görmek istemediğimzi bir colon
 
       yani bu sana true değerini verecek o zaman sen bu değer true ise arka planı use yardımıı ile alıp kullan. yok eğer değilse normal arkaplanını kullan 
 
+      
        const albumId = isAlbum ? location.pathname.slice(-1) : " "; 
        şimdi elimdeAlbumid var ben o zaman albumData[id].bgcolorı alıp arka plana koyabilriim 
         const bgColor = albumsData[Number(albumId)].bgColor; bu benim bastığım albümün sahip olduğu arkaplan rengi 
@@ -71,23 +74,75 @@ PLAYERDE ŞARKI OYNATMA
   };  
   ***************************************
          ŞARKININ SÜRESİNİ VE ARTIŞ DEĞERİĞİNİ GÖSTERME HOW İS İT 
+   
+    ÖNEMLİ ÖNEMLİ
+  audioRef.current: benim elementim yani audio elementimin anlık değerlerine ulaşmamı sağlayan yapı 
+  audioRef.current.currentTime : şarkının o an nerede olduğu barın yüzde kaçı dolmuş 
+  audioRef.current.duration: audio nun totat değeri uzunluğu 
+  audioRef.current.play() => şarkıyı oynat 
+   audioRef.current.pause()=> şarkıyı duraklat 
+audioRef.current.ontimeupdate = () => {x} x deki veriler sürekli güncellenir. buradan 
 
-  
+ seekBar.current.style.width = Math.floor((audioRef.current.currentTime / audioRef.current.duration) * 100 ) + "%";
+ yani bizim ilerleme çubuğumuzun width değeri de neden anlık değişmesin ki 
+
+    <audio ref={audioRef} src={track.file}></audio> video çalarımda olan kaset gibi düşün ana app.jsx doysasında bu 
+   {time.currentTime.minute} : {time.currentTime.second}{" "} çubuğun sağına ve soluna yerleştirdiğim  statein anlık değerleri (bu vesile ile state dediğimiz şeyin anlık veri ihtiyacını karşılayan bir yapı olduğunu tekrar anladık )
+   PEKİ ben statimin içinde şarkının anlık ve değeri ve toplam değerlerini kaydettim. onlar ben de ok no problem . şimdi geriye kaldı bu değerler değiştiğinde ben bunları nasıl algılayacağım 
+
+
+   const [time, setTime] = useState({
+    currentTime: {
+      minute: 0,
+      second: 0,
+    },
+    totalTime: {
+      minute: 0,
+      second: 0,
+    },
+  });   bu ise benim şarkının anlık değerlerini tuttuğum state  
+
 
  useEffect(() => {
     setTimeout(() => {
       audioRef.current.ontimeupdate = () => {
+        seekBar.current.style.width =
+          Math.floor(
+            (audioRef.current.currentTime / audioRef.current.duration) * 100
+          ) + "%";
         setTime({
           currentTime: {
             minute: Math.floor(audioRef.current.currentTime / 30),
             second: Math.floor(audioRef.current.currentTime % 30),
           },
+
           totalTime: {
             minute: Math.floor(audioRef.current.duration / 60), // şarıkının süresini dakika sayısı
-            second: Math.floor(audioRef.current.duration % 60), // şarkının süresinin mod 60 ı
+            second: Math.floor(audioRef.current.duration % 60), // şarkının süresinin mod 60'
           },
         });
       };
     });
   }, [audioRef]);
-  
+
+
+  ŞARKIYA BASTIĞIMIZDA ŞARKI ÇALINSIN: 
+   şimdi şarkıya bastığımızda şarkının çalınması için şarkının id sine ihtiyacım var ki ben bunu songdata[id] içine aktaracağım. 
+   biz bunu dispatch ile çokrahat yapabiliriz ama burda disptach çalışmıyor. dolayısıyla useref ile elemtinin içinden id yi seçebilir miyim ona bakacağım. 
+
+   şimdi songitem sayfasında bastığım onClick clg de gözükmedi onun yerine albumdsiplay da gözüktü ve songun id lerini de aldı   şimdi i
+    
+    ***şakıya id yi gönderdik ama otomotik çalmayı nasıl yapacağımı çözemedim nasıl yapcaksın kardeşim adam orda kazırk kadar Play fonlsiyonu yazmış 
+    orda audioRef.current.play() ne işe yarıyor .  şarkının yani track id sini değiştirdiğin fonksiyonun içinde id yi set ettikten sonra 
+    bu fonksiyonu da çağırırsan zaten otomotik çalma işi tamamlanır 
+
+    ***********************
+
+    İLERLEME ÇUBUĞUNA BASINCA ORADAN OYNATMAYA DEVAM ETTİRME
+
+    şimdi beyin fırtınası yapalım : kaldığı yerden şarkıyı devam ettirmek için neler yapılabilir. biz şarkının süresini ve ilerleme çubuğunu pekala yaptık :
+      çubuğa bastığında bu çubuğun farzadelimm dörtte biri oradaki değeri alıp şarkının acudio kısmına yerleştirebilri miyiz . audioRef.currentTime= 
+
+       audioRef.current.currentTime=x buraya ne dersen şarkıdirek ordan oynamaya devam eder zaten önemli olan senin bastığın yerin konumunu saniye cinsinden bulabilmen 
+
+        audioRef.current.currentTime =(e.nativeEvent.offsetX / seekBg.current.offsetWidth) *audioRef.current.duration;

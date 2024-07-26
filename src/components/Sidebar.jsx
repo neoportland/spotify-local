@@ -1,7 +1,8 @@
 import { assets } from "../assets/assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <div className="w-[25%] h-full p-2 text-white  lg:flex gap-2 hidden flex-col">
       <div className=" h-[15%]   bg-[#121212] flex flex-row justify-around flex-col ">
@@ -13,7 +14,10 @@ const Sidebar = () => {
         </div>
         <div className="flex items-center gap-3 m-3  pl-8 cursor-pointer ">
           <img className="w-6 " src={assets.search_icon} alt="" />
-          <p className="font"> Search</p>
+          <p onClick={() => navigate("/search")} className="font">
+            {" "}
+            Search
+          </p>
         </div>
       </div>
       <div className="bg-[#121212] h-[85%] rounded  ">

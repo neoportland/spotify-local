@@ -3,8 +3,18 @@ import { assets, songsData } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 
 const Player = () => {
-  const { seekBar, seekBg, Play, track, time, Pause, playStatus } =
-    useContext(PlayerContext);
+  const {
+    seekBar,
+    seekBg,
+    Play,
+    track,
+    prev,
+    time,
+    seekSong,
+    next,
+    Pause,
+    playStatus,
+  } = useContext(PlayerContext);
 
   return (
     <div className="h-[10%] bg-black flex  justify-between items-center px-4 text-white ">
@@ -18,7 +28,11 @@ const Player = () => {
       <div className="flex flex-col items-center gap-1 m-auto">
         <div className=" flex gap-4">
           <img className="h-4 cursor-pointer" src={assets.shuffle_icon} />
-          <img className="w-4 cursor-pointer" src={assets.prev_icon} />
+          <img
+            onClick={() => prev(track.id)}
+            className="w-4 cursor-pointer"
+            src={assets.prev_icon}
+          />
 
           {playStatus ? (
             <img
@@ -34,7 +48,11 @@ const Player = () => {
             />
           )}
 
-          <img className="w-4 cursor-pointer" src={assets.next_icon} />
+          <img
+            onClick={() => next(track.id)}
+            className="w-4 cursor-pointer"
+            src={assets.next_icon}
+          />
           <img className="w-4 cursor-pointer" src={assets.loop_icon} />
         </div>
         <div className="flex items-center gap-5">
@@ -44,11 +62,12 @@ const Player = () => {
           </p>
           <div
             ref={seekBg}
+            onClick={seekSong}
             className="w-[60vw] max-w-[500px] bg-gray-300 rounded-full cursor-pointer  "
           >
             <hr
               ref={seekBar}
-              className="h-1 border-none w-10 bg-green-800 rounded-full "
+              className="h-1 border-none w-0 bg-green-800 rounded-full "
             />
           </div>
           <p>

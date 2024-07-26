@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { albumsData, assets, songsData } from "../assets/assets";
 import Navbar from "./Navbar";
+import { PlayerContext } from "../context/PlayerContext";
 
-const DisplayAlbum = () => {
-  // gelen id yi biliyoruz o zaman albumdata[id]
+const DisplayAlbum = ({ gonder }) => {
+  const { tempId, setTempId, change } = useContext(PlayerContext);
+
   const { id } = useParams();
   const albumData = albumsData[id];
+
+  const yenideger = (por) => {
+    gonder(por);
+  };
   return (
     <>
       <Navbar />
@@ -45,6 +51,8 @@ const DisplayAlbum = () => {
       {songsData.map((item, index) => {
         return (
           <div
+            // onClick={() => setTempId(item.id)}
+            onClick={() => change(item.id)}
             key={index}
             className="grid grid-cols-3 cursor-pointer sm:grid-cols-4 gap-2 p-2 items-center  text-[#a7a7a7] hover:bg-[#ffffff2b] curser-pointer "
           >

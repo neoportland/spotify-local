@@ -3,8 +3,9 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import DisplayHome from "./DisplayHome";
 import DisplayAlbum from "./DisplayAlbum";
 import { albumsData } from "../assets/assets";
+import Search from "./Search";
 
-const Display = () => {
+const Display = ({ gelen }) => {
   const displayRef = useRef();
   const location = useLocation();
 
@@ -20,6 +21,10 @@ const Display = () => {
       displayRef.current.style.background = "#121212";
     }
   });
+  // const gelen = (item) => {
+  //   console.log("merhaba yukarıya gelen id :", item);
+  //   // ıdtoapp(item);
+  // };
 
   return (
     <div
@@ -28,7 +33,8 @@ const Display = () => {
     >
       <Routes>
         <Route path="/" element={<DisplayHome />} />
-        <Route path="/album/:id" element={<DisplayAlbum />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/album/:id" element={<DisplayAlbum gonder={gelen} />} />
       </Routes>
     </div>
   );
